@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 
 const knex = require('knex');
-const knexConfig = require('knexfile')
+const knexConfig = require('./knexfile')
 
 const db = knex(knexConfig.development);
 
@@ -12,6 +12,32 @@ server.use(express.json());
 server.use(helmet());
 
 // endpoints here
+
+// Get || Read
+
+server.get('/zoos', (req, res) => {
+  db.get('zoos')
+    .then( get => {
+      res.status(200).json(get);
+    })
+    .catch( err => {
+      res.status(500).json(err);
+    })
+})
+
+// Get By ID || Read By ID
+
+server.get('/zoos/:id', (req, res) => {
+  const id = req.params.id;
+
+  db.getById(id)
+    .then( get => {
+      res.status(200).json(get)
+    })
+    .catch( err => {
+      res.status(500).json(get);
+    })
+})
 
 // Post || Create
 
